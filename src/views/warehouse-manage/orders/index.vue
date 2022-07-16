@@ -25,7 +25,31 @@
           fit
           highlight-current-row
         >
+          >
           <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column type="expand">
+            <template slot-scope="scope">
+              <el-table
+                class="children-table"
+                :data="scope.row.children"
+                border
+                stripe
+                style="width: 60%"
+              >
+                <el-table-column label="id" prop="id"></el-table-column>
+                <el-table-column
+                  label="product_id"
+                  prop="product_id"
+                ></el-table-column>
+                <el-table-column
+                  label="购买数量"
+                  prop="quantity"
+                ></el-table-column>
+                <el-table-column label="操作"></el-table-column>
+              </el-table>
+            </template>
+          </el-table-column>
+
           <el-table-column
             align="center"
             label="id"
@@ -116,11 +140,17 @@
             width="100"
           ></el-table-column>
           <el-table-column
-            label="is_shipping"
-            prop="is_shipping"
+            label="连接状态"
+            prop="link_status"
             align="center"
             width="100"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <el-tag :type="isShippingTag(scope.row.link_status).type">{{
+                isShippingTag(scope.row.link_status).text
+              }}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column
             label="状态"
             prop="status"
@@ -208,6 +238,20 @@ export default {
       productCode: {},
     };
   },
+  computed: {
+    isShippingTag: () => {
+      return function (status) {
+        switch (status) {
+          case -1:
+            return { text: "连接失败", type: "danger" };
+          case 0:
+            return { text: "暂未连接", type: "primary" };
+          case 1:
+            return { text: "连接成功", type: "success" };
+        }
+      };
+    },
+  },
   watch: {
     search(newValue, oldValue) {
       this.params["search"] = newValue;
@@ -280,9 +324,10 @@ export default {
     linkProducts() {
       let data = this.$refs.ordersTable.selection;
       let ids = data.map((v) => v.id);
-        link({id:ids}).then(response=>{
-          console.log(response)
-        })
+      link({ id: ids }).then((response) => {
+        this.$message({ type: "success", message: "关联成功" });
+        this.$refs.ordersTable.clearSelection();
+      });
     },
   },
 };
@@ -300,4 +345,5 @@ export default {
     margin: 0 10px 0 0px;
   }
 }
+
 </style>
