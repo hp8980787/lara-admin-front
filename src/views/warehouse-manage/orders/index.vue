@@ -36,10 +36,18 @@
                 stripe
                 style="width: 60%"
               >
-                <el-table-column label="sku" prop="product.sku"></el-table-column>
+                <el-table-column
+                  label="sku"
+                  prop="product.sku"
+                ></el-table-column>
                 <el-table-column label="图片">
                   <template slot-scope="scope">
-                    <img @mouseenter='111' :src="scope.row.product.cover_img" width="50px" alt="">
+                    <img
+                      @mouseenter="111"
+                      :src="scope.row.product.cover_img"
+                      width="50px"
+                      alt=""
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -50,8 +58,21 @@
                   label="购买数量"
                   prop="quantity"
                 ></el-table-column>
-                <el-table-column label="库存" prop="product.stock"></el-table-column>
-                <el-table-column label="操作"></el-table-column>
+                <el-table-column
+                  label="库存"
+                  prop="product.stock"
+                ></el-table-column>
+                <el-table-column label="操作">
+                  <template slot-scope="scope">
+                    <el-button
+                      type="success"
+                      size="mini"
+                      @click.native="purchase(scope.row)"
+                    >
+                      采购</el-button
+                    >
+                  </template>
+                </el-table-column>
               </el-table>
             </template>
           </el-table-column>
@@ -212,6 +233,12 @@
             >
           </span>
         </el-dialog>
+
+        <!-- 采购modal -->
+        <!-- <el-dialog title="采购" :visible.sync="dialogVisiblePurchase">
+          <supplier-create></supplier-create>
+        </el-dialog> -->
+
       </div>
     </el-col>
     <el-col :span="12">
@@ -226,10 +253,12 @@ import { update } from "@/api/warehouse-manage/order";
 import { link } from "@/api/warehouse-manage/order";
 import Page from "@/components/Pagination";
 
+import router from '@/router';
 export default {
   name: "Orders",
   components: {
     Page,
+   
   },
   data() {
     return {
@@ -240,8 +269,10 @@ export default {
       params: {},
       search: "",
       dialogVisible: false,
+      dialogVisiblePurchase: false,
       orderUserInfo: {},
       productCode: {},
+      purchaseForm: {},
     };
   },
   computed: {
@@ -335,6 +366,11 @@ export default {
         this.$refs.ordersTable.clearSelection();
       });
     },
+
+    purchase(row) {
+      let url = `/warehouse/orders/purchase/${row.product_id}`
+    this.$router.push(url)
+    },
   },
 };
 </script>
@@ -351,5 +387,4 @@ export default {
     margin: 0 10px 0 0px;
   }
 }
-
 </style>

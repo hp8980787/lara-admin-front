@@ -169,7 +169,18 @@ export const asyncRoutes = [
         meta:{
           title:'订单',
           icon:'order'
-        }
+        },children:[
+          {
+            path:'purchase/:product_id',
+            name:'orders.purchase',
+            component:()=>import("@/views/warehouse-manage/orders/purchase"),
+            hidden:true,
+            meta:{
+              title:'采购',
+              icon:'purchase',
+            }
+          }
+        ]
       },{
         path:'storehouse',
         name:'storehouse',
