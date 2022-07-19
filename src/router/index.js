@@ -152,7 +152,7 @@ export const asyncRoutes = [
         meta: { title: 'menu2' }
       }
     ]
-  },{
+  }, {
     path: '/warehouse',
     component: Layout,
     name: 'warehouse',
@@ -161,47 +161,55 @@ export const asyncRoutes = [
       title: '进销存',
       icon: 'warehouse'
     },
-    children:[
+    children: [
       {
-        path:'orders',
-        name:'orders',
-        component:()=>import('@/views/warehouse-manage/orders/index'),
-        meta:{
-          title:'订单',
-          icon:'order'
-        },children:[
+        path: 'orders',
+        name: 'orders',
+        redirect: '/warehouse/orders/index',
+        component:()=>import("@/views/warehouse-manage/orders/app"),
+        meta:{title:'订单管理'},
+        children: [
           {
-            path:'purchase/:product_id',
-            name:'orders.purchase',
-            component:()=>import("@/views/warehouse-manage/orders/purchase"),
+            path: 'orders/index',
+            name: 'orders.index',
+            component: () => import('@/views/warehouse-manage/orders/index'),
+            meta: {
+              title: '订单',
+              icon: 'order'
+            },
+          },
+          {
+            path: 'purchase/:product_id',
+            name: 'orders.purchase',
             hidden:true,
-            meta:{
-              title:'采购',
-              icon:'purchase',
+            component: () => import("@/views/warehouse-manage/orders/purchase"),
+            meta: {
+              title: '采购',
+              icon: 'purchase',
             }
           }
         ]
-      },{
-        path:'storehouse',
-        name:'storehouse',
-        component:()=>import('@/views/warehouse-manage/storahouse/index'),
-        meta:{
-          title:'仓库',
-          icon:'warehouse'
+      }, {
+        path: 'storehouse',
+        name: 'storehouse',
+        component: () => import('@/views/warehouse-manage/storahouse/index'),
+        meta: {
+          title: '仓库',
+          icon: 'warehouse'
         }
-      },{
-        path:'purchase',
-        name:'purchase',
-        component:()=>import('@/views/warehouse-manage/purchase/index'),
-        meta:{
-          title:'采购',
-          icon:'purchase'
+      }, {
+        path: 'purchase',
+        name: 'purchase',
+        component: () => import('@/views/warehouse-manage/purchase/index'),
+        meta: {
+          title: '采购',
+          icon: 'purchase'
         }
       }
     ]
   },
 
- 
+
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

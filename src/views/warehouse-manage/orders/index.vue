@@ -244,6 +244,7 @@
     <el-col :span="12">
       <page v-if="isLoad" :page="pageObject" @changePage="pagination"></page>
     </el-col>
+    <router-view />
   </el-row>
 </template>
 
@@ -253,7 +254,7 @@ import { update } from "@/api/warehouse-manage/order";
 import { link } from "@/api/warehouse-manage/order";
 import Page from "@/components/Pagination";
 
-import router from '@/router';
+
 export default {
   name: "Orders",
   components: {
@@ -369,7 +370,7 @@ export default {
 
     purchase(row) {
       let url = `/warehouse/orders/purchase/${row.product_id}`
-    this.$router.push(url)
+     this.$router.push(url)
     },
   },
 };
