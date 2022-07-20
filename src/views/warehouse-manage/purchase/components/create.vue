@@ -128,7 +128,7 @@
 
 <script>
 import { getList } from "@/api/warehouse-manage/supplier";
-import { getList as warehouseList } from "@/api/warehouse-manage/warehouse";
+import {  getListAll as warehouseList } from "@/api/warehouse-manage/warehouse";
 import ProductModal from "@/views/products/components/index.vue";
 import { rate as rateExchange } from "@/api/rate";
 import { validDeadline } from "@/utils/validate";

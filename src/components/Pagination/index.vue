@@ -3,7 +3,7 @@
     background
     layout="prev, pager, next,sizes"
     :total="total"
-    :page-size="10"
+    :page-size="size"
     :page-sizes="pageSizes"
     @current-change="pageChange"
     @size-change="sizeChange"
@@ -17,7 +17,15 @@ export default {
   props: {
     page: {
       type: Object,
-      default: 0,
+    },
+    pageSizeProp: {
+      type: Array,
+      default: () => [],
+      required: false,
+    },
+    sizeProp: {
+      type: Number,
+      required: false,
     },
   },
   data() {
@@ -25,14 +33,18 @@ export default {
       total: 0,
       links: [],
       meta: [],
-      pageSizes: [10, 20, 40, 60, 80, 100],
+      pageSizes: [10, 15,20,25, 30, 50, 60, 80, 100],
+      size: 10,
     };
   },
   created() {
-    this.pageSizes = this.pageSizes ? this.pageSizes : [10, 20, 40, 50, 60];
+    this.pageSizes =
+      this.pageSizeProp.length > 0 ? this.pageSizeProp : this.pageSize;
+    this.size = this.sizeProp ?? this.size;
     this.links = this.page.links;
     this.meta = this.page.meta;
     this.total = this.meta.total;
+    this.size = this.meta.paerPage
   },
   methods: {
     nextPageEvent() {
