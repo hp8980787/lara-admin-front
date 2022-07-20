@@ -6,3 +6,11 @@ export function create(params) {
         params
     })
 }
+
+export function getList(params){
+    return request({
+        url:"/purchases",
+        method:'get',
+        params
+    })
+}
