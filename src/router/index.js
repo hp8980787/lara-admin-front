@@ -152,22 +152,49 @@ export const asyncRoutes = [
         meta: { title: 'menu2' }
       }
     ]
-  }, {
-    path: '/warehouse',
+  },
+  {
+    path:'process',
+    name:'process',
+    component:Layout,
+    meta:{
+      title:'流程'
+    }
+  },
+  {
+    path:'/products',
+    name:'products',
     component: Layout,
-    name: 'warehouse',
-    redirect: '/warehouse/orders',
+    redirect:'/products/index',
+    children:[
+      {
+        path:'index',
+        name:'products.index',
+        meta:{
+          title:'商品',
+          icon:'battery'
+        },
+        component:()=>import("@/views/products/index")
+      }
+    ]
+    
+  },
+  {
+    path: '/sale',
+    name: 'sale',
     meta: {
-      title: '进销存',
-      icon: 'warehouse'
+      title: '销售',
+      icon: 'el-icon-sell'
     },
+    component: Layout,
+    redirect: '/sale/orders',
     children: [
       {
         path: 'orders',
         name: 'orders',
-        redirect: '/warehouse/orders/index',
-        component:()=>import("@/views/warehouse-manage/orders/app"),
-        meta:{title:'订单管理'},
+        redirect: '/sale/orders/index',
+        component: () => import("@/views/warehouse-manage/orders/app"),
+        meta: { title: '订单管理' },
         children: [
           {
             path: 'orders/index',
@@ -181,7 +208,7 @@ export const asyncRoutes = [
           {
             path: 'purchase/:product_id',
             name: 'orders.purchase',
-            hidden:true,
+            hidden: true,
             component: () => import("@/views/warehouse-manage/orders/purchase"),
             meta: {
               title: '采购',
@@ -189,14 +216,45 @@ export const asyncRoutes = [
             }
           }
         ]
-      }, {
+      },
+    ]
+  },
+  {
+    path: '/warehouse',
+    component: Layout,
+    name: 'warehouse',
+    redirect: '/warehouse/orders',
+    meta: {
+      title: '进销存',
+      icon: 'warehouse'
+    },
+    children: [
+      {
         path: 'storehouse',
         name: 'storehouse',
-        component: () => import('@/views/warehouse-manage/storahouse/index'),
+        component: () => import("@/views/warehouse-manage/storahouse/index"),
         meta: {
           title: '仓库',
           icon: 'warehouse'
-        }
+        }, children: [
+          {
+            path: 'manage',
+            name: 'storehouse.manage',
+            component: () => import("@/views/warehouse-manage/storahouse/manage"),
+            meta: {
+              title: '仓库管理',
+              icon: 'warehouse'
+            }
+          }, {
+            path: 'record',
+            name: 'storehouse.record',
+            component: () => import("@/views/warehouse-manage/storahouse/record"),
+            meta: {
+              title: '出入仓记录',
+              icon: 'el-icon-document'
+            }
+          }
+        ]
       }, {
         path: 'purchase',
         name: 'purchase',

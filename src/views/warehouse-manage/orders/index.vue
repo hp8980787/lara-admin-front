@@ -369,7 +369,7 @@ export default {
     },
 
     purchase(row) {
-      let url = `/warehouse/orders/purchase/${row.product_id}`
+      let url = `/sale/orders/purchase/${row.product_id}`
      this.$router.push(url)
     },
   },
