@@ -55,40 +55,6 @@ export const constantRoutes = [
     }]
   },
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  }
 ]
 
 /**
@@ -154,30 +120,76 @@ export const asyncRoutes = [
     ]
   },
   {
-    path:'process',
-    name:'process',
-    component:Layout,
-    meta:{
-      title:'流程'
+    path: 'process',
+    name: 'process',
+    component: Layout,
+    meta: {
+      title: '流程',
+
     }
   },
   {
-    path:'/products',
-    name:'products',
+    path: '/personnel',
+    name: 'personnel',
     component: Layout,
-    redirect:'/products/index',
-    children:[
+    meta: {
+      title: '人事',
+      icon: 'el-icon-user-solid'
+    },
+    children: [
       {
-        path:'index',
-        name:'products.index',
-        meta:{
-          title:'商品',
-          icon:'battery'
+        path: 'departments',
+        name: 'departments',
+        meta: {
+          title: '部门管理',
+          icon: 'el-icon-user'
         },
-        component:()=>import("@/views/products/index")
+        component:()=>import("@/views/personnel/departments/index")
+      }, {
+        path: 'users',
+        name: 'users',
+        meta: {
+          title: '用户管理',
+          icon: 'el-icon-user',
+        }
+      }, {
+        path: 'permissions',
+        name: 'permissions',
+        meta: {
+          title: '权限管理',
+          icon: 'permission',
+          role: ['admin']
+        },
+        component: () => import("@/views/personnel/permissions/index")
+      },
+      {
+        path: 'roles',
+        name: 'roles',
+        meta: {
+          title: '角色管理',
+          icon: 'permission',
+          role: ['admin']
+        },
       }
     ]
-    
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: Layout,
+    redirect: '/products/index',
+    children: [
+      {
+        path: 'index',
+        name: 'products.index',
+        meta: {
+          title: '商品',
+          icon: 'battery'
+        },
+        component: () => import("@/views/products/index")
+      }
+    ]
+
   },
   {
     path: '/sale',
