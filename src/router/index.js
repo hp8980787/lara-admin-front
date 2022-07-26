@@ -278,6 +278,14 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path:'/finance',
+    name:'finance',
+    meta:{
+      title:'财务',
+      icon:'finance',
+    }
+  },
 
 
 

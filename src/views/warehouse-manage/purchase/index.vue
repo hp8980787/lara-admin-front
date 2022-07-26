@@ -2,8 +2,8 @@
   <el-row v-loading="loading">
     <el-col :span="24" class="purchase-header">
       <el-button type="primary">新增</el-button>
-      <el-popconfirm 
-        style="margin-left:5px"
+      <el-popconfirm
+        style="margin-left: 5px"
         v-if="buttonShow"
         confirm-button-text="好的"
         cancel-button-text="不用了"
@@ -11,29 +11,33 @@
         icon-color="red"
         title="是否删除?"
       >
-        <el-button slot="reference"  type="warning"
-          >删除</el-button
-        >
+        <el-button slot="reference" type="warning">删除</el-button>
       </el-popconfirm>
     </el-col>
     <el-col :span="24">
       <el-table :data="table" @selection-change="selecttionChange">
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column type="expand">
-            <template slot-scope="scope">
-                <el-table :data="scope.row.items">
-                    <el-table-column label="sku" prop="product.sku" ></el-table-column>
-                    <el-table-column label="图片" prop="product.sku" >
-                        <template slot-scope="res">
-                            <img :src="res.row.product.cover_img" width="50px" alt="">
-                        </template>
-                    </el-table-column>
-                       <el-table-column label="购买价格" prop="price"></el-table-column>
-                    <el-table-column label="购买数量" prop="quantity"></el-table-column>
-                    <el-table-column label="购买总价" prop="amount"></el-table-column>
-                    <el-table-column label="仓库" prop="warehouse.name"></el-table-column>
-                </el-table>
-            </template>
+          <template slot-scope="scope">
+            <el-table :data="scope.row.items">
+              <el-table-column label="sku" prop="product.sku"></el-table-column>
+              <el-table-column label="图片" prop="product.sku">
+                <template slot-scope="res">
+                  <img :src="res.row.product.cover_img" width="50px" alt="" />
+                </template>
+              </el-table-column>
+              <el-table-column label="购买价格" prop="price"></el-table-column>
+              <el-table-column
+                label="购买数量"
+                prop="quantity"
+              ></el-table-column>
+              <el-table-column label="购买总价" prop="amount"></el-table-column>
+              <el-table-column
+                label="仓库"
+                prop="warehouse.name"
+              ></el-table-column>
+            </el-table>
+          </template>
         </el-table-column>
         <el-table-column prop="id" label="id"></el-table-column>
         <el-table-column prop="title" label="采购标题"></el-table-column>
@@ -50,7 +54,17 @@
         </el-table-column>
         <el-table-column prop="created_at" label="创建时间"></el-table-column>
         <el-table-column label="操作">
-            <el-button type="success">批准</el-button>
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status === 0"
+              v-permission="['admin', 'purchaser']"
+              type="success"
+              @click="approve(scope.row,1)"
+              >批准</el-button
+            >
+            <el-button v-if="scope.row.status===1"  @click="approve(scope.row,2)" type="success">到货</el-button>
+          
+          </template>
         </el-table-column>
       </el-table>
     </el-col>
@@ -59,8 +73,11 @@
 
 <script>
 import { getList } from "@/api/warehouse-manage/purchase";
+import { approve as purchaseApprove } from "@/api/warehouse-manage/purchase";
+import permission from "@/directive/permission/index.js";
 export default {
   name: "index",
+  directives: { permission },
   data() {
     return {
       table: [],
@@ -99,6 +116,12 @@ export default {
       } else {
         this.buttonShow = false;
       }
+    },
+    approve(row,status) {
+      
+      purchaseApprove({status:status},row.id).then(response=>{
+        this.list();
+      })
     },
   },
 };

@@ -7,10 +7,25 @@ export function create(params) {
     })
 }
 
-export function getList(params){
+export function getList(params) {
     return request({
-        url:"/purchases",
-        method:'get',
+        url: "/purchases",
+        method: 'get',
+        params
+    })
+}
+export function update(params, id) {
+    return request({
+        url: `/purchases/${id}`,
+        method: 'put',
+        params
+    })
+}
+
+export function approve(params,id){
+    return request({
+        url:`/purchases/${id}/approve`,
+        method:'put',
         params
     })
 }

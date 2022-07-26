@@ -38,6 +38,7 @@ export default {
     };
   },
   created() {
+    console.log(this.page)
     this.pageSizes =
       this.pageSizeProp.length > 0 ? this.pageSizeProp : this.pageSize;
     this.size = this.sizeProp ?? this.size;

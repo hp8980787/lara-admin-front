@@ -161,16 +161,11 @@
             width="200"
           ></el-table-column>
           <el-table-column
-            label="is_shipping"
-            prop="is_shipping"
-            align="center"
-            width="100"
-          ></el-table-column>
-          <el-table-column
             label="连接状态"
             prop="link_status"
             align="center"
             width="100"
+            fixed="right"
           >
             <template slot-scope="scope">
               <el-tag :type="isShippingTag(scope.row.link_status).type">{{
@@ -183,7 +178,14 @@
             prop="status"
             align="center"
             width="100"
-          ></el-table-column>
+            fixed="right"
+          >
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status===0" type="warning">未发货</el-tag>
+            <el-tag v-else-if="scope.row.status===1" type="primary">已发货</el-tag>
+            <el-tag v-else type="success">已签收</el-tag>
+          </template>
+          </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-button
@@ -204,6 +206,13 @@
                 type="success"
                 size="small"
                 >保存</el-button
+              >
+              <el-button
+                v-if="canShipping(scope.row)&&scope.row.status===0"
+                @click="shipping(scope.row)"
+                type="success"
+                size="mini"
+                >发货</el-button
               >
             </template>
           </el-table-column>
@@ -235,10 +244,48 @@
         </el-dialog>
 
         <!-- 采购modal -->
-        <!-- <el-dialog title="采购" :visible.sync="dialogVisiblePurchase">
-          <supplier-create></supplier-create>
-        </el-dialog> -->
-
+        <el-dialog title="发货" :visible.sync="dialogVisibleShipping">
+          <el-form :model="shippingForm" ref="shippingForm" label-width="120px">
+            <el-form-item
+              label="选择发货仓库"
+              prop="warehouse"
+              :rules="{ required: true, message: '必须' }"
+            >
+              <el-select v-model="shippingForm.warehouse">
+                <el-option
+                  v-for="(item, key) in warehouse"
+                  :key="key"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="物流单号"
+              prop="shipping_no"
+              :rules="{ required: true, message: '必须' }"
+            >
+              <el-input v-model="shippingForm.shipping_no"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="物流公司"
+              prop="shipping_company"
+              :rules="{ required: true, message: '必须' }"
+            >
+              <el-input v-model="shippingForm.shipping_company"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="运费"
+              prop="shipping_price"
+              :rules="{ required: true, message: '必须' }"
+            >
+              <el-input v-model="shippingForm.shipping_price"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success" @click="send()">提交</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
       </div>
     </el-col>
     <el-col :span="12">
@@ -252,14 +299,14 @@
 import { getList } from "@/api/warehouse-manage/order";
 import { update } from "@/api/warehouse-manage/order";
 import { link } from "@/api/warehouse-manage/order";
+import { warehouse } from "@/api/warehouse-manage/order";
+import { orderShip } from "@/api/warehouse-manage/order";
 import Page from "@/components/Pagination";
-
 
 export default {
   name: "Orders",
   components: {
     Page,
-   
   },
   data() {
     return {
@@ -271,9 +318,12 @@ export default {
       search: "",
       dialogVisible: false,
       dialogVisiblePurchase: false,
+      dialogVisibleShipping: false,
       orderUserInfo: {},
       productCode: {},
       purchaseForm: {},
+      warehouse: {},
+      shippingForm: {},
     };
   },
   computed: {
@@ -369,8 +419,35 @@ export default {
     },
 
     purchase(row) {
-      let url = `/sale/orders/purchase/${row.product_id}`
-     this.$router.push(url)
+      let url = `/sale/orders/purchase/${row.product_id}`;
+      this.$router.push(url);
+    },
+    canShipping(row) {
+      let children = row.children;
+
+      if (children.length > 0) {
+        let judge = children.every((v) => {
+          return v.quantity <= v.product.stock;
+        });
+        return judge;
+      }
+      return false;
+    },
+    shipping(row) {
+      this.dialogVisibleShipping = true;
+      warehouse({order_id:row.id}).then((response) => {
+        this.warehouse = response.data;
+      });
+      this.shippingForm['order_id'] = row.id
+    },
+    send() {
+      this.$refs.shippingForm.validate((valid) => {
+        if (valid) {
+          orderShip(this.shippingForm).then((response) => {
+            console.log(response)
+          });
+        }
+      });
     },
   },
 };

@@ -128,7 +128,7 @@
 
 <script>
 import { getList } from "@/api/warehouse-manage/supplier";
-import {  getListAll as warehouseList } from "@/api/warehouse-manage/warehouse";
+import { getListAll as warehouseList } from "@/api/warehouse-manage/warehouse";
 import ProductModal from "@/views/products/components/index.vue";
 import { rate as rateExchange } from "@/api/rate";
 import { validDeadline } from "@/utils/validate";
@@ -137,7 +137,7 @@ export default {
   name: "create",
   props: {
     product_id: {
-      type: Number,
+      type: Array,
       default: 0,
       required: false,
     },
@@ -163,7 +163,7 @@ export default {
     };
     return {
       form: {
-        items:[]
+        items: [],
       },
       supplierData: {},
       warehouseData: {},
@@ -193,17 +193,19 @@ export default {
   created() {
     this.supplierList();
     this.getWarehouse();
-    if (this.product_id != 0) {
-      this.items.dynamicItems.push({
-        product_id: this.product_id,
+    if (this.product_id.length>0) {
+      for(let i in this.product_id){
+          this.items.dynamicItems.push({
+        product_id: this.product_id[i],
         storehouse_id: "",
         price: "",
         quantity: 1,
         explain: "",
         currency: "CNY",
       });
+      }
+    
     }
-      
   },
   methods: {
     supplierList() {
@@ -254,10 +256,10 @@ export default {
           this.$refs.itemsForm.validate((valid) => {
             if (valid) {
               this.form.items = this.items.dynamicItems;
-              purchaseCreate(this.form).then(response=>{
-                this.$message({type:'success',message:'创建成功'})
-               this.$router.push('/warehouse/orders/orders/index')
-              })
+              purchaseCreate(this.form).then((response) => {
+                this.$message({ type: "success", message: "创建成功" });
+                this.$router.push("/warehouse/purchase");
+              });
             } else {
               return false;
             }
