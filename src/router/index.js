@@ -125,7 +125,7 @@ export const asyncRoutes = [
     component: Layout,
     meta: {
       title: '流程',
-
+      icon:'workflow'
     }
   },
   {
