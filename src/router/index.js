@@ -63,69 +63,12 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-  {
     path: 'process',
     name: 'process',
     component: Layout,
     meta: {
       title: '流程',
-      icon:'workflow'
+      icon: 'workflow'
     }
   },
   {
@@ -144,7 +87,7 @@ export const asyncRoutes = [
           title: '部门管理',
           icon: 'el-icon-user'
         },
-        component:()=>import("@/views/personnel/departments/index")
+        component: () => import("@/views/personnel/departments/index")
       }, {
         path: 'users',
         name: 'users',
@@ -279,12 +222,51 @@ export const asyncRoutes = [
     ]
   },
   {
-    path:'/finance',
-    name:'finance',
-    meta:{
-      title:'财务',
-      icon:'finance',
-    }
+    path: '/finance',
+    name: 'finance',
+    meta: {
+      title: '财务',
+      icon: 'finance',
+
+    },
+    component: Layout,
+    children: [
+      {
+        name: 'bill',
+        path: 'bill',
+        component:()=>import("@/views/finance/bill"),
+        meta: {
+          title: '账单',
+          icon: 'bill'
+        },
+        children: [
+          {
+            name: 'billCategory',
+            path: 'category',
+            meta: {
+              title: '账单分类',
+              icon: 'el-icon-menu',
+            },
+            component:()=>import("@/views/finance/bill/category"),
+          }, {
+            name: 'billWrite',
+            path: 'write',
+            meta: {
+              title: '记账',
+              icon: 'bill'
+            },
+            affix: true,
+          }, {
+            name: 'billSetting',
+            path: 'setting',
+            meta: {
+              title: '账单设置',
+              icon: 'el-icon-setting'
+            }
+          },
+        ]
+      },
+    ]
   },
 
 
