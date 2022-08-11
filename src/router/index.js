@@ -230,15 +230,7 @@ export const asyncRoutes = [
 
     },
     component: Layout,
-    children: [
-      {
-        name: 'bill',
-        path: 'bill',
-        component:()=>import("@/views/finance/bill"),
-        meta: {
-          title: '账单',
-          icon: 'bill'
-        },
+   
         children: [
           {
             name: 'billCategory',
@@ -247,7 +239,7 @@ export const asyncRoutes = [
               title: '账单分类',
               icon: 'el-icon-menu',
             },
-            component:()=>import("@/views/finance/bill/category"),
+            component:()=>import("@/views/finance/category"),
           }, {
             name: 'billWrite',
             path: 'write',
@@ -255,18 +247,37 @@ export const asyncRoutes = [
               title: '记账',
               icon: 'bill'
             },
-            affix: true,
+            component:()=>import("@/views/finance/bill"),
           }, {
             name: 'billSetting',
             path: 'setting',
             meta: {
-              title: '账单设置',
+              title: '财务设置',
               icon: 'el-icon-setting'
-            }
+            },
+            component:()=>import("@/views/finance/setting"),
+            children:[
+              {
+                name:'ledger',
+                path:'ledger',
+                meta:{
+                  title:'账套管理',
+                  icon:'bill'
+                },
+                component:()=>import("@/views/finance/setting/ledger")
+              },{
+                name:'financeUser',
+                path:'user',
+                meta:{
+                  title:'财务账号管理',
+                  icon:'user'
+                }
+              }
+            ]
           },
         ]
-      },
-    ]
+   
+    
   },
 
 
