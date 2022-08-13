@@ -272,6 +272,14 @@ export const asyncRoutes = [
                   title:'财务账号管理',
                   icon:'user'
                 }
+              },{
+                name:'column',
+                path:'column',
+                meta:{
+                  title:'字段设置',
+                  icon:'el-icon-s-grid'
+                },
+                component:()=>import("@/views/finance/setting/column")
               }
             ]
           },
