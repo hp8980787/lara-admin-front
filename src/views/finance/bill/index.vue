@@ -8,8 +8,17 @@
       </div>
     </el-col>
     <el-dialog :title="title" :visible.sync="formDialogVisible">
-      <el-form :model="form" ref="form" label-width="100px">
-        <el-form-item label="选择账本" prop="bill_id">
+      <el-form
+        v-loading="formLoading"
+        :model="form"
+        ref="form"
+        label-width="100px"
+      >
+        <el-form-item
+          label="选择账本"
+          prop="bill_id"
+          :rules="{ required: true, message: '必须' }"
+        >
           <el-select v-model="form.bill_id" size="medium">
             <el-option
               v-for="(item, index) in ledger"
@@ -19,7 +28,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="分类" prop="category">
+        <el-form-item
+          label="分类"
+          prop="category"
+          :rules="{ required: true, message: '必须' }"
+        >
           <el-select v-model="form.category">
             <el-option
               v-for="(item, index) in category"
@@ -39,19 +52,24 @@
               v-model="form.status"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              active-value="1"
-              inactive-value="0"
+              :active-value="1"
+              :inactive-value="0"
             >
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="金额" prop="amount">
+        <el-form-item
+          label="金额"
+          prop="amount"
+          :rules="{ required: true, message: '必须' }"
+        >
           <el-input v-model="form.amount" placeholder="请输入美金"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea"></el-input>
         </el-form-item>
-        <el-form-item>
+        <parser v-if="formInit" :form-conf="formJson" @submit="submit" />
+        <el-form-item v-if="!formInit">
           <el-button type="primary">提交</el-button>
         </el-form-item>
       </el-form>
@@ -62,18 +80,40 @@
 <script>
 import { getList as BillCategory } from "@/api/finance/bill/category";
 import { index as billList } from "@/api/finance/bill/ledger";
-
+import Parser from "form-gen-parser";
 export default {
   name: "billWrite",
+  components: {
+    Parser,
+  },
   data() {
     return {
-      form: {},
+      form: {
+        status: 1,
+      },
       formDialogVisible: false,
       title: "",
       type: "",
       category: {},
       ledger: {},
+      formJson: {},
+      formInit: false,
+      formLoading: false,
     };
+  },
+  watch: {
+    "form.category"(newData, oldData) {
+      this.formJson = {};
+      this.formInit = false;
+      this.formLoading = true;
+      if (this.category.filter((v) => v.id === newData)[0].form != null) {
+        this.formJson = JSON.parse(
+          this.category.filter((v) => v.id === newData)[0].form
+        );
+        this.formInit = true;
+      }
+      this.formLoading = false;
+    },
   },
   created() {
     this.getBillCategory();
@@ -94,6 +134,15 @@ export default {
       billList().then((response) => {
         this.ledger = response.data;
       });
+    },
+    submit(data) {
+      this.form["data"] = data;
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          
+        }
+      });
+      console.log(this.form);
     },
   },
 };

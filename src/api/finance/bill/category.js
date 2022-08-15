@@ -14,3 +14,11 @@ export function store(params) {
         params
     })
 }
+
+export function update(params, id) {
+    return request({
+        url: `/bill/category/${id}`,
+        method: 'put',
+        params
+    })
+}
