@@ -22,3 +22,11 @@ export function update(params, id) {
         params
     })
 }
+
+export function assign(params) {
+    return request({
+        url: '/bill/category/assign',
+        method: 'post',
+        params
+    })
+}

@@ -3,7 +3,8 @@ import request from "@/utils/request"
 export function index(params) {
     return request({
         url: '/bill/columns',
-        method: 'get'
+        method: 'get',
+        params
     })
 }
 

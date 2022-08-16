@@ -30,10 +30,10 @@
         </el-form-item>
         <el-form-item
           label="分类"
-          prop="category"
+          prop="category_id"
           :rules="{ required: true, message: '必须' }"
         >
-          <el-select v-model="form.category">
+          <el-select v-model="form.category_id">
             <el-option
               v-for="(item, index) in category"
               :key="index"
@@ -70,7 +70,7 @@
         </el-form-item>
         <parser v-if="formInit" :form-conf="formJson" @submit="submit" />
         <el-form-item v-if="!formInit">
-          <el-button type="primary">提交</el-button>
+          <el-button type="primary" @click="submit">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -80,6 +80,7 @@
 <script>
 import { getList as BillCategory } from "@/api/finance/bill/category";
 import { index as billList } from "@/api/finance/bill/ledger";
+import { store } from "@/api/finance/bill/billItems";
 import Parser from "form-gen-parser";
 export default {
   name: "billWrite",
@@ -102,7 +103,7 @@ export default {
     };
   },
   watch: {
-    "form.category"(newData, oldData) {
+    "form.category_id"(newData, oldData) {
       this.formJson = {};
       this.formInit = false;
       this.formLoading = true;
@@ -136,10 +137,13 @@ export default {
       });
     },
     submit(data) {
-      this.form["data"] = data;
+      this.form["data"] = data
       this.$refs.form.validate((valid) => {
         if (valid) {
-          
+          store(this.form).then((response) => {
+            this.formDialogVisible=false
+            this.$message({type:'success',message:'添加成功'})
+          });
         }
       });
       console.log(this.form);

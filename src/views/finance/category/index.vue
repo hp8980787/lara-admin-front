@@ -26,7 +26,7 @@
                   >编辑</el-button
                 >
                 <el-button size="mini" type="danger">删除</el-button>
-                <el-button size="mini" type="primary" @click="assign"
+                <el-button size="mini" type="primary" @click="assign(scope.row)"
                   >分配字段</el-button
                 >
               </template>
@@ -74,7 +74,9 @@
       </el-form>
     </el-dialog>
     <el-dialog title="分配账单字段" :visible.sync="assignDialogVisible">
-      
+      <transfer :selected="selected" ref="transferChild" :key="timer"></transfer>
+      <br />
+      <el-button type="primary" @click="transferSubmit">提交</el-button>
     </el-dialog>
   </el-row>
 </template>
@@ -83,8 +85,14 @@
 import { store } from "@/api/finance/bill/category";
 import { getList } from "@/api/finance/bill/category";
 import { update } from "@/api/finance/bill/category";
+import { assign } from "@/api/finance/bill/category";
+import Transfer from "@/components/Transfer/Index.vue";
+
 export default {
   name: "billCategory",
+  components: {
+    Transfer,
+  },
   data() {
     return {
       table: [],
@@ -95,6 +103,9 @@ export default {
       type: "",
       loading: true,
       assignDialogVisible: false,
+      selected: [],
+      row: {},
+      timer:'',
     };
   },
   created() {
@@ -139,14 +150,34 @@ export default {
     edit(row) {
       let data = JSON.parse(JSON.stringify(row));
       this.form = data;
-
-      console.log(row.status, this.form.status);
       this.formDialogVisiable = true;
-      console.log(row);
     },
-    assign() {
+    assign(row) {
       this.assignDialogVisible = true;
-
+      let data = [];
+      this.selected=[];
+      row.columns.forEach((element) => {
+        data.push(element.id);
+      });
+      this.selected = data;
+      this.timer = new Date().getTime()
+      // console.log(this.selected);
+      this.row = row;
+    },
+    transferSubmit() {
+      let columns = this.$refs.transferChild.value;
+      let data = {
+        id: this.row.id,
+        columns: columns,
+      };
+      assign(data).then((response) => {
+        this.assignDialogVisible = false;
+        this.$message({
+          type: "success",
+          message: "分配成功",
+        });
+        this.list();
+      });
     },
   },
 };
