@@ -63,13 +63,45 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: 'process',
+    path: '/process',
     name: 'process',
     component: Layout,
     meta: {
       title: '流程',
       icon: 'workflow'
-    }
+    },
+    children: [
+      {
+        name: 'workflow',
+        path: 'workflow',
+        component: () => import("@/views/process/workflow"),
+        meta: {
+          title: '工作流',
+          icon: 'workflow',
+        },
+        children:[
+          {
+            name:'workflow-index',
+            path:'index',
+            meta:{
+              title:'工作流管理',
+              icon:'workflow'
+            },
+            component:()=>import("@/views/process/workflow/index/draw")
+          },
+          {
+            name: 'workflow-category',
+            path: 'category',
+            component: () => import("@/views/process/workflow/category"),
+            meta: {
+              title: '分类',
+              icon: 'workflow',
+            },
+          }
+        ]
+      },
+    ]
+
   },
   {
     path: '/personnel',
@@ -230,62 +262,62 @@ export const asyncRoutes = [
 
     },
     component: Layout,
-   
+
+    children: [
+      {
+        name: 'billCategory',
+        path: 'category',
+        meta: {
+          title: '账单分类',
+          icon: 'el-icon-menu',
+        },
+        component: () => import("@/views/finance/category"),
+      }, {
+        name: 'billWrite',
+        path: 'write',
+        meta: {
+          title: '记账',
+          icon: 'bill'
+        },
+        component: () => import("@/views/finance/bill"),
+      }, {
+        name: 'billSetting',
+        path: 'setting',
+        meta: {
+          title: '财务设置',
+          icon: 'el-icon-setting'
+        },
+        component: () => import("@/views/finance/setting"),
         children: [
           {
-            name: 'billCategory',
-            path: 'category',
+            name: 'ledger',
+            path: 'ledger',
             meta: {
-              title: '账单分类',
-              icon: 'el-icon-menu',
-            },
-            component:()=>import("@/views/finance/category"),
-          }, {
-            name: 'billWrite',
-            path: 'write',
-            meta: {
-              title: '记账',
+              title: '账套管理',
               icon: 'bill'
             },
-            component:()=>import("@/views/finance/bill"),
+            component: () => import("@/views/finance/setting/ledger")
           }, {
-            name: 'billSetting',
-            path: 'setting',
+            name: 'financeUser',
+            path: 'user',
             meta: {
-              title: '财务设置',
-              icon: 'el-icon-setting'
+              title: '财务账号管理',
+              icon: 'user'
+            }
+          }, {
+            name: 'column',
+            path: 'column',
+            meta: {
+              title: '字段设置',
+              icon: 'el-icon-s-grid'
             },
-            component:()=>import("@/views/finance/setting"),
-            children:[
-              {
-                name:'ledger',
-                path:'ledger',
-                meta:{
-                  title:'账套管理',
-                  icon:'bill'
-                },
-                component:()=>import("@/views/finance/setting/ledger")
-              },{
-                name:'financeUser',
-                path:'user',
-                meta:{
-                  title:'财务账号管理',
-                  icon:'user'
-                }
-              },{
-                name:'column',
-                path:'column',
-                meta:{
-                  title:'字段设置',
-                  icon:'el-icon-s-grid'
-                },
-                component:()=>import("@/views/finance/setting/column")
-              }
-            ]
-          },
+            component: () => import("@/views/finance/setting/column")
+          }
         ]
-   
-    
+      },
+    ]
+
+
   },
 
 

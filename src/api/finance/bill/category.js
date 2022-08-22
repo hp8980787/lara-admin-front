@@ -1,6 +1,6 @@
 import request from "@/utils/request"
 
-export function getList(params) {
+export function index(params) {
     return request({
         url: '/bill/category',
         method: 'get',
@@ -23,10 +23,25 @@ export function update(params, id) {
     })
 }
 
+export function destroy(id) {
+    return request({
+        url: `/bill/category/${id}`,
+        method: 'delete',
+    })
+}
+
 export function assign(params) {
     return request({
         url: '/bill/category/assign',
         method: 'post',
+        params
+    })
+}
+
+export function list(params) {
+    return request({
+        url: '/bill/category/list',
+        method: 'get',
         params
     })
 }

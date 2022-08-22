@@ -6,3 +6,11 @@ export function store(params) {
         params
     })
 }
+
+export function index(params) {
+    return request({
+        url: '/bill/items',
+        method: 'get',
+        params
+    })
+}

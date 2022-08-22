@@ -22,10 +22,16 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
+
                 <el-button size="mini" type="primary" @click="edit(scope.row)"
                   >编辑</el-button
                 >
-                <el-button size="mini" type="danger">删除</el-button>
+                <el-popconfirm title="这是一段内容确定删除吗？" @confirm='deleteCategory(scope.row)'>
+                  <el-button slot="reference" size="mini" type="danger"
+                    >删除</el-button
+                  >
+                </el-popconfirm>
+
                 <el-button size="mini" type="primary" @click="assign(scope.row)"
                   >分配字段</el-button
                 >
@@ -74,7 +80,11 @@
       </el-form>
     </el-dialog>
     <el-dialog title="分配账单字段" :visible.sync="assignDialogVisible">
-      <transfer :selected="selected" ref="transferChild" :key="timer"></transfer>
+      <transfer
+        :selected="selected"
+        ref="transferChild"
+        :key="timer"
+      ></transfer>
       <br />
       <el-button type="primary" @click="transferSubmit">提交</el-button>
     </el-dialog>
@@ -83,9 +93,10 @@
 
 <script>
 import { store } from "@/api/finance/bill/category";
-import { getList } from "@/api/finance/bill/category";
+import { index as getList } from "@/api/finance/bill/category";
 import { update } from "@/api/finance/bill/category";
 import { assign } from "@/api/finance/bill/category";
+import { destroy } from "@/api/finance/bill/category";
 import Transfer from "@/components/Transfer/Index.vue";
 
 export default {
@@ -105,7 +116,7 @@ export default {
       assignDialogVisible: false,
       selected: [],
       row: {},
-      timer:'',
+      timer: "",
     };
   },
   created() {
@@ -155,12 +166,12 @@ export default {
     assign(row) {
       this.assignDialogVisible = true;
       let data = [];
-      this.selected=[];
+      this.selected = [];
       row.columns.forEach((element) => {
         data.push(element.id);
       });
       this.selected = data;
-      this.timer = new Date().getTime()
+      this.timer = new Date().getTime();
       // console.log(this.selected);
       this.row = row;
     },
@@ -179,6 +190,12 @@ export default {
         this.list();
       });
     },
+    deleteCategory(row){
+      destroy(row.id).then((response)=>{
+        this.$message({type:'success',message:'删除成功'})
+        this.list()
+      })
+    }
   },
 };
 </script>
