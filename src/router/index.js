@@ -87,7 +87,7 @@ export const asyncRoutes = [
               title:'工作流管理',
               icon:'workflow'
             },
-            component:()=>import("@/views/process/workflow/index/draw")
+            component:()=>import("@/views/process/workflow/index/index")
           },
           {
             name: 'workflow-category',

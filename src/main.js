@@ -8,6 +8,7 @@ import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 
 import '@/styles/index.scss' // global css
 
+
 import App from './App'
 import store from './store'
 import router from './router'
@@ -15,7 +16,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import permissions from './directive/permission/index.js' 
+import permissions from './directive/permission/index.js'
 
 /**
  * If you don't want to use mock-server
@@ -31,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale },permissions)
+Vue.use(ElementUI, { locale }, permissions)
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
