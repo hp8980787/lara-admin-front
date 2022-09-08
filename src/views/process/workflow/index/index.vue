@@ -9,38 +9,37 @@
           <el-step title="绘制工作流图"></el-step>
         </el-steps>
       </div>
-    
     </el-col>
     <el-col :span="24">
-     <create></create>
+      <create></create>
     </el-col>
-     <el-col :span="24">
+    <el-col :span="24">
       <div class="app-container">
-               <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+        <el-button style="margin-top: 12px" @click="next">下一步</el-button>
       </div>
-
-     </el-col>
+    </el-col>
   </el-row>
 </template>
 
 <script>
-import Create from "./create.vue"
+import Create from "./create.vue";
+import FormJs from "./form.vue"
 export default {
   name: "WorkflowIndex",
-  components:{
-    Create
+  components: {
+    Create,FormJs
   },
-   data() {
-      return {
-        active: 0
-      };
-    },
+  data() {
+    return {
+      active: 0,
+    };
+  },
   mounted() {},
-  methods:{
-     next() {
-        if (this.active++ > 2) this.active = 0;
-      }
-  }
+  methods: {
+    next() {
+      if (this.active++ > 2) this.active = 0;
+    },
+  },
 };
 </script>
 

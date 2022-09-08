@@ -45,6 +45,9 @@
           <el-form-item label="描述">
             <el-input type="textarea" v-model="form.description"></el-input>
           </el-form-item>
+          <el-form-item label="表单json" prop="json" :rules="{required:true,message:'必须'}">
+            <el-input v-model="form.json"></el-input>
+          </el-form-item>
         </el-form>
       </div>
     </el-col>
